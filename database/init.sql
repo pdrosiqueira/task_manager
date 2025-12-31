@@ -11,3 +11,5 @@ CREATE TABLE task(
     FOREIGN KEY (status_id) REFERENCES task_status(id)
         ON DELETE CASCADE 
 );
+
+INSERT INTO task_status(name) VALUES ("Disponível"), ("Fazendo"), ("Feita");
