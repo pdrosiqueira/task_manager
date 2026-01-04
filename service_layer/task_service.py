@@ -1,25 +1,28 @@
 from typing import Tuple, Union
 from entities.task import Task
 from entities.task_status import TaskStatus
-from data_access_layer.dao.task_dao import TaskDAO
-from data_access_layer.dao.task_status_dao import TaskStatusDAO
+from data_access_layer.dao.task_dao_impl import TaskDAOImpl
+from data_access_layer.dao.task_status_dao_impl import TaskStatusDAOImpl
+from data_access_layer.database_api_adapters.sqlite_database_api_adapter import SQLiteDatabaseAPIAdapter
 
 class TaskService:
     """
     Serviço responsável pela lógica de negócio relacionada às tarefas
     """
-    def __init__(self, task_dao: TaskDAO, task_status_dao: TaskStatusDAO) -> None:
+    def __init__(self, database_filename: str = "database/schema.db") -> None:
         """Inicializa um objeto TaskService
         
         Parameters
         ----------
-        task_dao: data_access_layer.dao.task_dao.TaskDAO
-            DAO para operações com tarefas
-        task_status_dao: data_access_layer.dao.task_status_dao.TaskStatusDAO
-            DAO para operações com status de tarefas
+        database_filename: str
+            Caminho para o arquivo do banco de dados SQLite (padrão: "database/schema.db")
         """
-        self._task_dao = task_dao
-        self._task_status_dao = task_status_dao
+        # Instancia o adaptador do banco de dados
+        db_adapter = SQLiteDatabaseAPIAdapter(database_filename)
+        
+        # Instancia os DAOs necessários
+        self._task_dao = TaskDAOImpl(db_adapter)
+        self._task_status_dao = TaskStatusDAOImpl(db_adapter)
 
     def create_task(self, name: str, description: str, status_name: str) -> None:
         """Cria uma nova tarefa no sistema

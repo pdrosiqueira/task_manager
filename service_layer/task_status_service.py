@@ -1,20 +1,25 @@
 from typing import Tuple, Union
 from entities.task_status import TaskStatus
-from data_access_layer.dao.task_status_dao import TaskStatusDAO
+from data_access_layer.dao.task_status_dao_impl import TaskStatusDAOImpl
+from data_access_layer.database_api_adapters.sqlite_database_api_adapter import SQLiteDatabaseAPIAdapter
 
 class TaskStatusService:
     """
     Serviço responsável pela lógica de negócio relacionada aos status das tarefas
     """
-    def __init__(self, task_status_dao: TaskStatusDAO) -> None:
+    def __init__(self, database_filename: str = "database/schema.db") -> None:
         """Inicializa um objeto TaskStatusService
         
         Parameters
         ----------
-        task_status_dao: data_access_layer.dao.task_status_dao.TaskStatusDAO
-            DAO para operações com status de tarefas
+        database_filename: str
+            Caminho para o arquivo do banco de dados SQLite (padrão: "database/schema.db")
         """
-        self._task_status_dao = task_status_dao
+        # Instancia o adaptador do banco de dados
+        db_adapter = SQLiteDatabaseAPIAdapter(database_filename)
+        
+        # Instancia o DAO necessário
+        self._task_status_dao = TaskStatusDAOImpl(db_adapter)
 
     def list_all_status(self) -> Union[Tuple[TaskStatus], None]:
         """Lista todos os status disponíveis no sistema
@@ -28,14 +33,17 @@ class TaskStatusService:
 
     def get_status_by_name(self, status_name: str) -> Union[TaskStatus, None]:
         """Busca um status específico pelo nome
+        
         Parameters
         ----------
         status_name: str
             Nome do status a ser buscado
+            
         Returns
         -------
         Union[TaskStatus, None]
             Status encontrado ou None se não existir
+            
         Raises
         ------
         ValueError
