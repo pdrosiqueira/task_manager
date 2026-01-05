@@ -14,7 +14,7 @@ class TaskStatusDAOImpl(TaskStatusDAO):
         
         Parameters
         ----------
-        db_api_adapter: database.database_api_adapter.DatabaseAPIAdapter
+        db_api_adapter: data_access_layer.database_api_adapters.database_api_adapter.DatabaseAPIAdapter
             Adaptador de API de banco de dados a ser utilizado
         """
 
