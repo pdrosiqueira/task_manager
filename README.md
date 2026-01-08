@@ -42,10 +42,13 @@ O seguinte projeto implementa um padrão arquitetural de três camadas.
 ├── main.py
 ├── presentation_layer
 │   └── __init__.py
+│   └── task_controller.py
 ├── README.md
 ├── requirements.txt
 ├── service_layer
 │   └── __init__.py
+│   └── task_service.py
+│   └── task_status_service.py
 └── tests
     ├── intregation
     └── unit
